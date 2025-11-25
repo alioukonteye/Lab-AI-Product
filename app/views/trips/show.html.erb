@@ -1,0 +1,134 @@
+<div class="min-h-screen bg-[#f6f6f6]">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex">
+          <div class="flex-shrink-0 flex items-center">
+            <%= link_to "Yugo", root_path, class: "text-2xl font-bold text-gray-800" %>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <span class="text-gray-500 mr-4">Welcome, <%= current_user.first_name %></span>
+          <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "text-sm text-gray-500 hover:text-gray-700" %>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="md:flex md:items-center md:justify-between mb-10">
+      <div class="flex-1 min-w-0">
+        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate font-['Crimson_Pro']">
+          <%= @trip.name %>
+        </h2>
+        <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
+          <div class="mt-2 flex items-center text-sm text-gray-500">
+            <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <%= @trip.destination %>
+          </div>
+          <div class="mt-2 flex items-center text-sm text-gray-500">
+            <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <%= @trip.start_date.strftime("%B %d") %> - <%= @trip.end_date.strftime("%B %d, %Y") %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <!-- Left Column: Participants & Status -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Participants Card -->
+        <div class="bg-white overflow-hidden shadow rounded-[20px]">
+          <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 font-['Inter'] mb-4">Participants</h3>
+            <ul class="divide-y divide-gray-200">
+              <% @trip.user_trip_statuses.each do |status| %>
+                <li class="py-4 flex items-center justify-between">
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold">
+                      <%= status.user.first_name&.first || status.user.email.first.upcase %>
+                    </div>
+                    <div class="ml-3">
+                      <p class="text-sm font-medium text-gray-900"><%= status.user.first_name || status.user.email %></p>
+                      <p class="text-xs text-gray-500"><%= status.role.capitalize %></p>
+                    </div>
+                  </div>
+                  <div>
+                    <% if status.form_filled? %>
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Preferences filled
+                      </span>
+                    <% else %>
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                        Pending preferences
+                      </span>
+                    <% end %>
+                  </div>
+                </li>
+              <% end %>
+            </ul>
+
+            <% if @user_trip_status.creator? %>
+              <div class="mt-6">
+                <%= link_to "Invite Participants", new_trip_trip_invitation_path(@trip), class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-[#d97706] bg-orange-50 hover:bg-orange-100" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Action Required -->
+      <div class="space-y-6">
+        <div class="bg-white overflow-hidden shadow rounded-[20px] border-t-4 border-[#d97706]">
+          <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 font-['Inter'] mb-2">Next Step</h3>
+
+            <% if !@user_trip_status.invitation_accepted? %>
+              <p class="text-sm text-gray-500 mb-4">
+                You have been invited to this trip.
+              </p>
+              <%= button_to "Join Trip", join_trip_path(@trip), method: :post, class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-[#d97706] hover:bg-[#b45309]" %>
+            <% elsif !@user_trip_status.form_filled? %>
+              <p class="text-sm text-gray-500 mb-4">
+                Tell us your preferences so we can tailor the trip to you.
+              </p>
+              <%= link_to "Fill Preferences", new_trip_preferences_form_path(@trip), class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-[#d97706] hover:bg-[#b45309]" %>
+            <% elsif @trip.user_trip_statuses.where(form_filled: false).any? %>
+              <p class="text-sm text-gray-500">
+                Waiting for other participants to fill their preferences...
+              </p>
+              <div class="mt-4 w-full bg-gray-200 rounded-full h-2.5">
+                <div class="bg-[#d97706] h-2.5 rounded-full" style="width: 45%"></div>
+              </div>
+            <% else %>
+              <p class="text-sm text-gray-500 mb-4">
+                All preferences received! Ready to generate suggestions.
+              </p>
+              <% if @trip.itinerary %>
+                <%= link_to "View Itinerary", trip_itinerary_path(@trip, @trip.itinerary), class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700" %>
+              <% elsif @trip.recommendation %>
+                <%= link_to "Review Suggestions", trip_recommendation_path(@trip, @trip.recommendation), class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 mb-2" %>
+
+                <% if @trip.user_trip_statuses.all?(&:recommendation_reviewed?) %>
+                  <%= button_to "Discover Itinerary", trip_itineraries_path(@trip), method: :post, class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-[#d97706] hover:bg-[#b45309]" %>
+                <% else %>
+                   <p class="text-xs text-center text-gray-500 mt-2">Waiting for all reviews to generate itinerary...</p>
+                <% end %>
+              <% else %>
+                <%= button_to "Generate Suggestions", trip_recommendations_path(@trip), method: :post, class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700" %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

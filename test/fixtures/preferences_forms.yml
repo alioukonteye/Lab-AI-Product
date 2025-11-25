@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_trip_status: one
+  budget: MyString
+  travel_pace: MyString
+  interests: MyText
+  activity_types: MyText
+
+two:
+  user_trip_status: two
+  budget: MyString
+  travel_pace: MyString
+  interests: MyText
+  activity_types: MyText

@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  itinerary: one
+  activity_item: one
+  day: 1
+  slot: MyString
+  time: 2025-11-25 12:48:05
+  position: 1
+
+two:
+  itinerary: two
+  activity_item: two
+  day: 1
+  slot: MyString
+  time: 2025-11-25 12:48:05
+  position: 1

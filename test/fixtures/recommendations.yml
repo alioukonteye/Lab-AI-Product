@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  trip: one
+  accepted: false
+  system_prompt: MyText
+
+two:
+  trip: two
+  accepted: false
+  system_prompt: MyText

@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  recommendation: one
+  activity_item: one
+  like: 1
+
+two:
+  recommendation: two
+  activity_item: two
+  like: 1

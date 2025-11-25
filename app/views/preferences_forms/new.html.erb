@@ -1,0 +1,53 @@
+<div class="min-h-screen bg-[#f6f6f6] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-2xl w-full space-y-8 bg-white p-10 rounded-[40px] shadow-xl">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-['Crimson_Pro'] font-bold text-gray-900">
+        Share your preferences for<br>
+        <span class="text-[#d97706]"><%= @trip.name %></span>
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Help us create the perfect itinerary for everyone.
+      </p>
+    </div>
+
+    <%= form_with(model: [@trip, @preferences_form], local: true, class: "mt-8 space-y-6") do |f| %>
+      <% if @preferences_form.errors.any? %>
+        <div class="bg-red-50 p-4 rounded-lg">
+          <ul class="list-disc list-inside text-red-700">
+            <% @preferences_form.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="space-y-6">
+        <div>
+          <%= f.label :budget, "What is your budget per day (excluding accommodation)?", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.select :budget, ["Low (< 50€)", "Medium (50€ - 150€)", "High (> 150€)"], {}, class: "appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#d97706] focus:border-[#d97706] focus:z-10 sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :travel_pace, "What is your preferred travel pace?", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.select :travel_pace, ["Relaxed (1-2 activities/day)", "Moderate (3-4 activities/day)", "Fast (5+ activities/day)"], {}, class: "appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#d97706] focus:border-[#d97706] focus:z-10 sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :interests, "What are your main interests? (e.g., Food, History, Art, Nature)", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.text_area :interests, rows: 3, class: "appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#d97706] focus:border-[#d97706] focus:z-10 sm:text-sm", placeholder: "I love trying local food and visiting museums..." %>
+        </div>
+
+        <div>
+          <%= f.label :activity_types, "Any specific activity types? (e.g., Hiking, Wine Tasting, Shopping)", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.text_area :activity_types, rows: 3, class: "appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#d97706] focus:border-[#d97706] focus:z-10 sm:text-sm", placeholder: "Wine tasting, boat tour..." %>
+        </div>
+      </div>
+
+      <div class="flex gap-4 pt-4">
+        <%= link_to "Cancel", trip_path(@trip), class: "w-1/2 flex justify-center py-3 px-4 border border-gray-300 text-sm font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#d97706] transition" %>
+
+        <%= f.submit "Save Preferences", class: "w-1/2 flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-full text-white bg-[#d97706] hover:bg-[#b45309] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#d97706] transition shadow-lg" %>
+      </div>
+    <% end %>
+  </div>
+</div>

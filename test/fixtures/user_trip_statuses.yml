@@ -1,0 +1,31 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  trip: one
+  role: creator
+  trip_status: joined
+  is_invited: false
+  form_filled: true
+  recommendation_reviewed: false
+  invitation_accepted: true
+
+two:
+  user: two
+  trip: one
+  role: invitee
+  trip_status: invited
+  is_invited: true
+  form_filled: false
+  recommendation_reviewed: false
+  invitation_accepted: false
+
+three:
+  user: one
+  trip: two
+  role: invitee
+  trip_status: joined
+  is_invited: true
+  form_filled: true
+  recommendation_reviewed: false
+  invitation_accepted: true
