@@ -1,0 +1,303 @@
+/* Page Container - Fond BLANC selon Figma */
+.create-trip-page {
+  background-color: #FFFFFF;
+  min-height: calc(100vh - 130px);
+  padding: 60px 48px;
+}
+
+.create-trip-page__container {
+  max-width: 1512px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 200px 1fr 320px;
+  gap: 80px;
+  align-items: start;
+}
+
+/* Progress Widget */
+.create-trip-page__progress {
+  padding-top: 100px;
+}
+
+.progress-widget {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.progress-widget__step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.progress-widget__step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 30px;
+  bottom: -16px;
+  width: 2px;
+  background-color: #e5e7eb;
+}
+
+.progress-widget__step--active::before {
+  background-color: #d97706;
+}
+
+.progress-widget__dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+  background-color: #FFFFFF;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.progress-widget__step--active .progress-widget__dot {
+  background-color: #d97706;
+  border-color: #d97706;
+}
+
+.progress-widget__label {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #9ca3af;
+  line-height: 1.2;
+}
+
+.progress-widget__step--active .progress-widget__label {
+  color: #374151;
+  font-weight: 500;
+}
+
+/* Main Form Section */
+.create-trip-page__main {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.create-trip-page__title {
+  font-family: 'Crimson Pro', serif;
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1;
+  color: #374151;
+  margin: 0 0 40px 0;
+  text-align: center;
+}
+
+/* Form */
+.create-trip-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  text-align: left;
+}
+
+.create-trip-form__errors {
+  background-color: #fee2e2;
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.create-trip-form__errors-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #991b1b;
+  margin: 0 0 8px 0;
+}
+
+.create-trip-form__errors-list {
+  margin: 0;
+  padding-left: 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #991b1b;
+}
+
+.create-trip-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.create-trip-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.create-trip-form__label {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
+  color: #374151;
+}
+
+/* Inputs avec contour subtil selon Figma */
+.create-trip-form__input,
+.create-trip-form__select {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 14px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  color: #374151;
+  transition: all 0.2s ease;
+}
+
+.create-trip-form__input:focus,
+.create-trip-form__select:focus {
+  outline: none;
+  border-color: #d97706;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+}
+
+.create-trip-form__input::placeholder {
+  color: #9ca3af;
+  font-weight: 300;
+}
+
+/* Section "I'm travelling alone" */
+.create-trip-form__alone-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.create-trip-form__alone-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.create-trip-form__alone-button {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #d97706;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: opacity 0.2s ease;
+}
+
+.create-trip-form__alone-button:hover {
+  opacity: 0.8;
+}
+
+/* Submit Button */
+.create-trip-form__submit {
+  margin-top: 24px;
+  padding: 14px 32px;
+  background-color: #d97706;
+  color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+  transition: all 0.2s ease;
+}
+
+.create-trip-form__submit:hover {
+  background-color: #b45309;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(217, 119, 6, 0.4);
+}
+
+/* Tips Sidebar Droite */
+.create-trip-page__tips {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.tip-card {
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.tip-card__title {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #d97706;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px 0;
+}
+
+.tip-card__text {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: #374151;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .create-trip-page__container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .create-trip-page__progress {
+    position: static;
+  }
+
+  .progress-bar {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .create-trip-page__main {
+    max-width: 100%;
+  }
+
+  .create-trip-page__tips {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .tip-card {
+    min-width: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .create-trip-page {
+    padding: 32px 16px;
+  }
+
+  .create-trip-page__title {
+    font-size: 32px;
+  }
+
+  .create-trip-form__row {
+    grid-template-columns: 1fr;
+  }
+}

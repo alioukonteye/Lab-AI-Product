@@ -1,0 +1,57 @@
+<div id="recommendation_card" class="recommendations">
+  <%
+    # Find the first item that the current user hasn't voted on yet
+    item = recommendation.recommendation_items.includes(:votes).detect do |ri|
+      !ri.votes.exists?(user: current_user)
+    end
+  %>
+
+  <% if item %>
+    <div class="recommendations__card">
+      <!-- Image Section -->
+      <div class="recommendations__image-container">
+        <img src="<%= destination_image_url(item.activity_item.name) %>" alt="<%= item.activity_item.name %>" class="recommendations__image">
+        <span class="recommendations__tag">
+          <%= item.activity_item.activity_type %>
+        </span>
+      </div>
+
+      <!-- Content Section -->
+      <div class="recommendations__content">
+        <div>
+          <h2 class="recommendations__title"><%= item.activity_item.name %></h2>
+          <p class="recommendations__description">
+            <%= item.activity_item.description %>
+          </p>
+
+          <div class="recommendations__badges">
+            <span class="recommendations__badge recommendations__badge--green">Local Favorite</span>
+            <span class="recommendations__badge recommendations__badge--yellow">Hidden Gem</span>
+          </div>
+
+          <div class="recommendations__info">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span><%= item.activity_item.price > 0 ? "€#{item.activity_item.price}" : "Free" %></span>
+          </div>
+        </div>
+
+        <!-- Voting Actions -->
+        <div class="recommendations__actions">
+          <%= button_to recommendation_item_votes_path(item), params: { vote: { liked: false } }, method: :post, class: "recommendations__vote-btn recommendations__vote-btn--dislike" do %>
+             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          <% end %>
+
+          <%= button_to recommendation_item_votes_path(item), params: { vote: { liked: true } }, method: :post, class: "recommendations__vote-btn recommendations__vote-btn--like" do %>
+             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="recommendations__empty">
+      <h2>All caught up!</h2>
+      <p>You have reviewed all suggestions.</p>
+      <%= link_to "Back to Dashboard", trip_path(trip), class: "btn btn--primary" %>
+    </div>
+  <% end %>
+</div>

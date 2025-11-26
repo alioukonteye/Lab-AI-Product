@@ -25,6 +25,7 @@ gem "stimulus-rails"
 
 # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 gem "cssbundling-rails"
+gem "sassc-rails"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
@@ -74,5 +75,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-
-gem "tailwindcss-rails", "~> 4.4"

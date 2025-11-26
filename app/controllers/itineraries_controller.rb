@@ -3,11 +3,15 @@ class ItinerariesController < ApplicationController
   before_action :set_trip
 
   def create
+    Rails.logger.info "ItinerariesController#create called for trip #{params[:trip_id]}"
     # Sélectionner les activités avec une majorité de likes
     # Logique : Pour chaque élément de recommandation, compter les likes. Si likes > (participants / 2), l'inclure.
 
     recommendation = @trip.recommendation
-    return redirect_to @trip, alert: "No recommendations found." unless recommendation
+    unless recommendation
+      Rails.logger.warn "No recommendation found for trip #{@trip.id}"
+      return redirect_to @trip, alert: "No recommendations found."
+    end
 
     participants_count = @trip.user_trip_statuses.count
     # Calcul du seuil de majorité stricte (plus de 50% des participants)

@@ -1,0 +1,93 @@
+<%= link_to trip_path(trip), class: "trip-card", id: dom_id(trip) do %>
+  <div class="trip-card__image">
+    <img src="<%= destination_image_url(trip.destination) %>" alt="<%= trip.destination %>" class="trip-card__image-bg">
+    <div class="trip-card__overlay"></div>
+    <div class="trip-card__image-content">
+      <h3 class="trip-card__name"><%= trip.name %></h3>
+      <p class="trip-card__destination">
+        <svg class="trip-card__location-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <%= trip.destination %>
+      </p>
+    </div>
+  </div>
+
+  <div class="trip-card__content">
+    <div class="trip-card__meta">
+      <div class="trip-card__meta-item">
+        <svg class="trip-card__meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        <%= trip.start_date.strftime("%b %d") %>
+      </div>
+      <div class="trip-card__meta-item">
+        <svg class="trip-card__meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        <%= trip.user_trip_statuses.count %> <%= trip.user_trip_statuses.count == 1 ? 'participant' : 'participants' %>
+      </div>
+    </div>
+
+    <%
+      # Ensure current_user is available in the partial context
+      # When rendered via broadcast, current_user might need to be passed explicitly or handled differently
+      # But for now, we assume the broadcast will render for a specific user context or we handle it in the broadcaster
+
+      # NOTE: In a real broadcast scenario, 'current_user' is not available.
+      # We will need to pass the user explicitly or render different versions for different users.
+      # The TripBroadcaster will handle rendering this partial for each user with the correct context.
+
+      user_status = trip.user_trip_statuses.find_by(user: current_user)
+      all_preferences_filled = trip.user_trip_statuses.all?(&:form_filled?)
+      has_recommendation = trip.recommendation.present?
+      has_itinerary = trip.itinerary.present?
+      all_reviews_done = trip.user_trip_statuses.all?(&:recommendation_reviewed?)
+    %>
+
+    <% if has_itinerary %>
+      <div class="trip-status trip-status--ready">
+        <svg class="trip-status__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Itinerary ready
+      </div>
+    <% elsif has_recommendation && all_reviews_done %>
+      <div class="trip-status trip-status--waiting">
+        <svg class="trip-status__icon trip-status__icon--spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        Generating trip...
+      </div>
+    <% elsif has_recommendation %>
+      <div class="trip-status trip-status--voting">
+        <svg class="trip-status__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.904 0 .715-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+        </svg>
+        Voting in progress
+      </div>
+    <% elsif all_preferences_filled %>
+      <div class="trip-status trip-status--waiting">
+        <svg class="trip-status__icon trip-status__icon--spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        Generating reco...
+      </div>
+    <% elsif user_status&.form_filled? %>
+      <div class="trip-status trip-status--waiting">
+        <svg class="trip-status__icon trip-status__icon--spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        Waiting for others
+      </div>
+    <% else %>
+      <div class="trip-status trip-status--action">
+        <svg class="trip-status__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Action required
+      </div>
+    <% end %>
+  </div>
+<% end %>

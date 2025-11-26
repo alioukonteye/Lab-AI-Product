@@ -2,8 +2,10 @@
   "name": "lab-ai-product",
   "private": true,
   "scripts": {
-    "build:css": "bin/rails tailwindcss:build"
+    "build:css": "sass ./app/assets/stylesheets/main.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   },
-  "dependencies": {},
+  "dependencies": {
+    "sass": "^1.77.0"
+  },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

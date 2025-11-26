@@ -1,0 +1,136 @@
+<%
+  # Determine trip state
+  all_accepted = trip.user_trip_statuses.all?(&:invitation_accepted?)
+  all_preferences_filled = trip.user_trip_statuses.all?(&:form_filled?)
+  recommendation = trip.recommendation
+  all_reviewed = recommendation && trip.user_trip_statuses.all?(&:recommendation_reviewed?)
+  itinerary = trip.itinerary
+  user_trip_status = trip.user_trip_statuses.find_by(user: current_user)
+%>
+
+<div id="<%= dom_id(trip, :status) %>" class="trip-dashboard__status">
+  <% if user_trip_status && !user_trip_status.invitation_accepted? %>
+    <!-- État: User needs to accept invitation -->
+    <div class="status-card status-card--join">
+      <div class="status-card__icon">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+        </svg>
+      </div>
+      <h3 class="status-card__title">You're invited!</h3>
+      <p class="status-card__message">Join this trip to start planning with your friends.</p>
+      <%= button_to "Join Trip", accept_invitation_trip_path(trip), method: :post, class: "status-card__button" %>
+    </div>
+
+  <% elsif !all_accepted %>
+    <!-- État: Waiting for participants to accept -->
+    <div class="status-card status-card--waiting">
+      <div class="status-card__icon">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <h3 class="status-card__title">Waiting for participants</h3>
+      <p class="status-card__message">Some participants haven't accepted the invitation yet. We'll notify you when everyone has joined!</p>
+    </div>
+
+  <% elsif !all_preferences_filled %>
+    <!-- État: Waiting for preferences -->
+    <div class="status-card status-card--preferences">
+      <div class="status-card__icon">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+      </div>
+      <h3 class="status-card__title">Fill your preferences</h3>
+      <p class="status-card__message">Tell us what you like so we can create the perfect itinerary for your group.</p>
+      <% if !user_trip_status.form_filled? %>
+        <%= link_to "Fill preferences", new_trip_preferences_form_path(trip), class: "status-card__button" %>
+      <% else %>
+        <div class="flex justify-center mt-4">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        </div>
+        <p class="text-sm text-gray-500 mt-2">Waiting for other participants...</p>
+      <% end %>
+    </div>
+
+  <% elsif !recommendation %>
+    <!-- État: Generating recommendations -->
+    <div class="status-card status-card--generating">
+      <div class="status-card__icon">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+      <h3 class="status-card__title">Generating recommendations...</h3>
+      <p class="status-card__message">We are crafting the best activities for your group based on everyone's preferences.</p>
+    </div>
+
+  <% elsif recommendation && !all_reviewed %>
+    <!-- État 1: Waiting for participants to review activities (Figma 9-579) -->
+    <div class="status-card status-card--review">
+      <div class="status-card__icon">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+      </div>
+      <h3 class="status-card__title">Waiting for participants to review activities</h3>
+      <p class="status-card__message">We've generated personalized recommendations. Everyone needs to vote on their favorite activities!</p>
+      <% if !user_trip_status.recommendation_reviewed? %>
+        <%= link_to "Review suggestions", trip_recommendation_path(trip, recommendation), class: "status-card__button" %>
+      <% end %>
+    </div>
+
+  <% elsif recommendation && !recommendation.votes_match? %>
+    <!-- État 2: Votes don't match yet (Figma 205-996) -->
+    <div class="status-card status-card--nomatch">
+      <div class="status-card__icon">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+        </svg>
+      </div>
+      <h3 class="status-card__title">Votes don't match yet</h3>
+      <p class="status-card__message">Not everyone agrees on the activities. We'll generate new recommendations for you!</p>
+      <%= button_to "Regenerate recommendations", trip_recommendations_path(trip), method: :post, class: "status-card__button" %>
+    </div>
+
+  <% elsif itinerary %>
+    <!-- État 3: Your itinerary is ready! (Figma 205-1101) -->
+    <div class="status-card status-card--ready">
+      <div class="status-card__icon status-card__icon--success">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <h3 class="status-card__title">Your itinerary is ready!</h3>
+      <p class="status-card__message">Based on everyone's votes, we've created the perfect itinerary for your trip.</p>
+
+      <!-- Activity Grid (6 images) -->
+      <div class="activity-grid">
+        <% itinerary.itinerary_items.limit(6).each do |item| %>
+          <div class="activity-grid__item">
+            <img src="<%= destination_image_url(item.activity_item.name) %>" alt="<%= item.activity_item.name %>" class="activity-grid__img">
+          </div>
+        <% end %>
+      </div>
+
+      <%= link_to "See full itinerary", trip_itinerary_path(trip, itinerary), class: "status-card__button" %>
+    </div>
+
+  <% else %>
+    <!-- État: Ready to generate itinerary -->
+    <div class="status-card status-card--generate-itinerary">
+      <div class="status-card__icon status-card__icon--success">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <h3 class="status-card__title">Everyone agrees!</h3>
+      <p class="status-card__message">All votes match. We are generating your perfect itinerary...</p>
+
+      <!-- Loading State / Auto-refresh hint -->
+      <div class="flex justify-center mt-4">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+      <p class="text-sm text-gray-500 mt-2">Please wait a moment...</p>
+    </div>
+  <% end %>
+</div>

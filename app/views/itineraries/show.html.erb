@@ -1,47 +1,52 @@
-<div class="min-h-screen bg-[#f6f6f6] py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-5xl mx-auto">
-    <div class="flex justify-between items-center mb-12">
+<div class="itinerary-page">
+  <div class="itinerary-container">
+    <!-- Header -->
+    <div class="itinerary-header">
       <div>
-        <h2 class="text-4xl font-['Crimson_Pro'] font-bold text-gray-900">
-          Your Itinerary for <span class="text-[#d97706]"><%= @trip.name %></span>
-        </h2>
-        <p class="mt-2 text-gray-600">Get ready for an amazing trip to <%= @trip.destination %>!</p>
+        <h1 class="itinerary-title">
+          Your Itinerary for <span class="text-highlight"><%= @trip.name %></span>
+        </h1>
+        <p class="itinerary-subtitle">Get ready for an amazing trip to <%= @trip.destination %>!</p>
       </div>
-      <%= link_to "Back to Dashboard", trip_path(@trip), class: "text-gray-600 hover:text-gray-900 font-medium" %>
+      <%= link_to "Back to Dashboard", trip_path(@trip), class: "btn-back" %>
     </div>
 
-    <div class="space-y-12">
+    <!-- Timeline -->
+    <div class="timeline">
       <% @grouped_items.each do |day, items| %>
-        <div class="relative">
-          <div class="sticky top-4 z-10 mb-6">
-            <span class="bg-[#d97706] text-white px-6 py-2 rounded-full text-lg font-bold shadow-lg">
-              Day <%= day %>
-            </span>
+        <div class="timeline-day">
+          <div class="day-marker">
+            <span class="day-badge">Day <%= day %></span>
           </div>
 
-          <div class="ml-8 border-l-2 border-gray-200 pl-8 space-y-8">
+          <div class="day-content">
             <% items.each do |item| %>
-              <div class="relative bg-white p-6 rounded-[20px] shadow-md hover:shadow-lg transition">
-                <div class="absolute -left-[41px] top-6 w-5 h-5 rounded-full border-4 border-white bg-[#d97706]"></div>
+              <div class="activity-card">
+                <div class="activity-card__image-wrapper">
+                  <img src="<%= destination_image_url(item.activity_item.name) %>" alt="<%= item.activity_item.name %>" class="activity-card__image">
+                </div>
 
-                <div class="flex flex-col md:flex-row gap-6">
-                  <div class="md:w-1/4">
-                    <span class="text-2xl font-bold text-gray-300 font-['Crimson_Pro']">
-                      <%= item.time&.strftime("%H:%M") || "TBD" %>
-                    </span>
+                <div class="activity-card__content">
+                  <div class="activity-card__header">
+                    <h3 class="activity-card__title"><%= item.activity_item.name %></h3>
+                    <% if item.activity_item.price && item.activity_item.price > 0 %>
+                      <span class="activity-card__price"><%= number_to_currency(item.activity_item.price, unit: "€") %></span>
+                    <% end %>
                   </div>
 
-                  <div class="md:w-3/4">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2"><%= item.activity_item.name %></h3>
-                    <p class="text-gray-600 mb-3"><%= item.activity_item.description %></p>
+                  <p class="activity-card__description">
+                    <%= item.activity_item.description %>
+                  </p>
 
-                    <div class="flex items-center text-sm text-gray-500">
-                      <span class="bg-gray-100 px-2 py-1 rounded mr-3">
-                        <%= item.activity_item.activity_type %>
-                      </span>
-                      <% if item.activity_item.price && item.activity_item.price > 0 %>
-                        <span><%= number_to_currency(item.activity_item.price, unit: "€") %></span>
-                      <% end %>
+                  <div class="activity-card__footer">
+                    <div class="activity-card__time">
+                      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      <%= item.time %>
+                    </div>
+                    <div class="activity-card__type">
+                      <%= item.activity_item.activity_type %>
                     </div>
                   </div>
                 </div>
@@ -52,13 +57,10 @@
       <% end %>
     </div>
 
-    <div class="mt-16 text-center">
-      <button class="px-8 py-4 bg-gray-900 text-white font-['Inter'] font-semibold text-lg rounded-full shadow-lg hover:bg-gray-800 transition">
-        Download PDF
-      </button>
-      <button class="ml-4 px-8 py-4 bg-white text-gray-900 border border-gray-200 font-['Inter'] font-semibold text-lg rounded-full shadow-lg hover:bg-gray-50 transition">
-        Share Itinerary
-      </button>
+    <!-- Actions -->
+    <div class="itinerary-actions">
+      <button class="btn-primary">Download PDF</button>
+      <button class="btn-secondary">Share Itinerary</button>
     </div>
   </div>
 </div>

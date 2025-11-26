@@ -1,53 +1,93 @@
-<div class="min-h-screen bg-[#f6f6f6] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-2xl w-full space-y-8 bg-white p-10 rounded-[40px] shadow-xl">
-    <div>
-      <h2 class="mt-6 text-center text-3xl font-['Crimson_Pro'] font-bold text-gray-900">
-        Share your preferences for<br>
-        <span class="text-[#d97706]"><%= @trip.name %></span>
-      </h2>
-      <p class="mt-2 text-center text-sm text-gray-600">
-        Help us create the perfect itinerary for everyone.
-      </p>
+<div class="preferences-page">
+  <div class="preferences-page__container">
+    <!-- Progress Sidebar -->
+    <div class="preferences-page__progress">
+      <div class="progress-widget">
+        <div class="progress-widget__step">
+          <div class="progress-widget__dot"></div>
+          <span class="progress-widget__label">Trip details</span>
+        </div>
+        <div class="progress-widget__step">
+          <div class="progress-widget__dot"></div>
+          <span class="progress-widget__label">Invite friends</span>
+        </div>
+        <div class="progress-widget__step progress-widget__step--active">
+          <div class="progress-widget__dot"></div>
+          <span class="progress-widget__label">Preferences</span>
+        </div>
+        <div class="progress-widget__step">
+          <div class="progress-widget__dot"></div>
+          <span class="progress-widget__label">Suggestions</span>
+        </div>
+        <div class="progress-widget__step">
+          <div class="progress-widget__dot"></div>
+          <span class="progress-widget__label">Itinerary</span>
+        </div>
+      </div>
     </div>
 
-    <%= form_with(model: [@trip, @preferences_form], local: true, class: "mt-8 space-y-6") do |f| %>
-      <% if @preferences_form.errors.any? %>
-        <div class="bg-red-50 p-4 rounded-lg">
-          <ul class="list-disc list-inside text-red-700">
-            <% @preferences_form.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-            <% end %>
-          </ul>
+    <!-- Main Form -->
+    <div class="preferences-page__main">
+      <h1 class="preferences-page__title">Tell us what you like</h1>
+      <h2 class="preferences-page__subtitle">Step <%= @step %> of 4</h2>
+
+      <%= form_with(model: @preferences_form, url: trip_preferences_form_path(@trip), method: :post, class: "preferences-form") do |form| %>
+        <%= hidden_field_tag :step, @step %>
+
+        <% case @step %>
+        <% when 1 %>
+          <!-- Step 1: Budget & Pace -->
+          <div class="preferences-form__field">
+            <%= form.label :budget, "What's your budget?", class: "preferences-form__label" %>
+            <%= form.select :budget, [["Low", "low"], ["Medium", "medium"], ["High", "high"]], {}, class: "preferences-form__input" %>
+          </div>
+
+          <div class="preferences-form__field">
+            <%= form.label :travel_pace, "Travel pace", class: "preferences-form__label" %>
+            <%=form.select :travel_pace, [["Relaxed", "relaxed"], ["Moderate", "moderate"], ["Fast-paced", "fast"]], {}, class: "preferences-form__input" %>
+          </div>
+
+        <% when 2 %>
+          <!-- Step 2: Interests -->
+          <div class="preferences-form__field">
+            <%= form.label :interests, "What are you interested in?", class: "preferences-form__label" %>
+            <%= form.text_area :interests, class: "preferences-form__textarea", placeholder: "Museums, food, nightlife..." %>
+          </div>
+
+        <% when 3 %>
+          <!-- Step 3: Activity Types -->
+          <div class="preferences-form__field">
+            <%= form.label :activity_types, "Favorite activities", class: "preferences-form__label" %>
+            <%= form.text_area :activity_types, class: "preferences-form__textarea", placeholder: "Walking tours, restaurants..." %>
+          </div>
+
+        <% when 4 %>
+          <!-- Step 4: Confirmation -->
+          <div class="preferences-form__summary">
+            <p>Review your preferences before submitting.</p>
+          </div>
+        <% end %>
+
+        <div class="preferences-form__navigation">
+          <% if @step > 1 %>
+            <%= link_to "Previous", new_trip_preferences_form_path(@trip, step: @step - 1), class: "preferences-form__button preferences-form__button--secondary" %>
+          <% end %>
+
+          <% if @step < 4 %>
+            <%= form.submit "Next", class: "preferences-form__button preferences-form__button--primary" %>
+          <% else %>
+            <%= form.submit "Submit preferences", class: "preferences-form__button preferences-form__button--primary" %>
+          <% end %>
         </div>
       <% end %>
+    </div>
 
-      <div class="space-y-6">
-        <div>
-          <%= f.label :budget, "What is your budget per day (excluding accommodation)?", class: "block text-sm font-medium text-gray-700 mb-2" %>
-          <%= f.select :budget, ["Low (< 50€)", "Medium (50€ - 150€)", "High (> 150€)"], {}, class: "appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#d97706] focus:border-[#d97706] focus:z-10 sm:text-sm" %>
-        </div>
-
-        <div>
-          <%= f.label :travel_pace, "What is your preferred travel pace?", class: "block text-sm font-medium text-gray-700 mb-2" %>
-          <%= f.select :travel_pace, ["Relaxed (1-2 activities/day)", "Moderate (3-4 activities/day)", "Fast (5+ activities/day)"], {}, class: "appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#d97706] focus:border-[#d97706] focus:z-10 sm:text-sm" %>
-        </div>
-
-        <div>
-          <%= f.label :interests, "What are your main interests? (e.g., Food, History, Art, Nature)", class: "block text-sm font-medium text-gray-700 mb-2" %>
-          <%= f.text_area :interests, rows: 3, class: "appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#d97706] focus:border-[#d97706] focus:z-10 sm:text-sm", placeholder: "I love trying local food and visiting museums..." %>
-        </div>
-
-        <div>
-          <%= f.label :activity_types, "Any specific activity types? (e.g., Hiking, Wine Tasting, Shopping)", class: "block text-sm font-medium text-gray-700 mb-2" %>
-          <%= f.text_area :activity_types, rows: 3, class: "appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#d97706] focus:border-[#d97706] focus:z-10 sm:text-sm", placeholder: "Wine tasting, boat tour..." %>
-        </div>
+    <!-- Tips Sidebar -->
+    <div class="preferences-page__tips">
+      <div class="tip-card">
+        <h3 class="tip-card__title">Tip #3</h3>
+        <p class="tip-card__text">Know what you love — it's the difference between "best trip ever" and "why did we come here?"</p>
       </div>
-
-      <div class="flex gap-4 pt-4">
-        <%= link_to "Cancel", trip_path(@trip), class: "w-1/2 flex justify-center py-3 px-4 border border-gray-300 text-sm font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#d97706] transition" %>
-
-        <%= f.submit "Save Preferences", class: "w-1/2 flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-full text-white bg-[#d97706] hover:bg-[#b45309] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#d97706] transition shadow-lg" %>
-      </div>
-    <% end %>
+    </div>
   </div>
 </div>

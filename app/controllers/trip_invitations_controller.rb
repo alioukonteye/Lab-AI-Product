@@ -6,29 +6,35 @@ class TripInvitationsController < ApplicationController
   end
 
   def create
-    email = params[:email]
-    user = User.find_by(email: email)
+    emails = params[:emails]&.reject(&:blank?) || []
 
-    if user.nil?
-      user = User.invite!(email: email)
-    end
-
-    # Vérifier si l'utilisateur est déjà invité
-    if @trip.user_trip_statuses.exists?(user: user)
-      redirect_to @trip, alert: "User already invited."
+    if emails.empty?
+      redirect_to new_trip_trip_invitations_path(@trip), alert: "Please enter at least one email address."
       return
     end
 
-    UserTripStatus.create!(
-      user: user,
-      trip: @trip,
-      role: :invitee,
-      trip_status: 'invited',
-      is_invited: true,
-      invitation_accepted: false
-    )
+    emails.each do |email|
+      user = User.find_by(email: email)
 
-    redirect_to @trip, notice: "Invitation sent to #{email}."
+      # Créer utilisateur si n'existe pas
+      if user.nil?
+        user = User.invite!(email: email)
+      end
+
+      # Skip si déjà invité
+      next if @trip.user_trip_statuses.exists?(user: user)
+
+      UserTripStatus.create!(
+        user: user,
+        trip: @trip,
+        role: :invitee,
+        trip_status: 'invited',
+        is_invited: true,
+        invitation_accepted: false
+      )
+    end
+
+    redirect_to new_trip_preferences_form_path(@trip), notice: "Invitations sent successfully!"
   end
 
   private

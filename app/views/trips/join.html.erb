@@ -1,0 +1,43 @@
+<div class="join-trip-page">
+  <div class="join-trip-container">
+    <h1 class="join-trip__title"><%= @trip.name %></h1>
+
+    <div class="join-trip__details">
+      <div class="join-trip__info-row">
+        <span class="join-trip__label">Destination</span>
+        <span class="join-trip__value"><%= @trip.destination %></span>
+      </div>
+
+      <div class="join-trip__info-row">
+        <span class="join-trip__label">Dates</span>
+        <span class="join-trip__value">
+          <%= @trip.start_date.strftime("%b %d") %> - <%= @trip.end_date.strftime("%b %d, %Y") %>
+        </span>
+      </div>
+
+      <div class="join-trip__info-row">
+        <span class="join-trip__label">Participants</span>
+        <span class="join-trip__value"><%= @trip.user_trip_statuses.count %> people</span>
+      </div>
+
+      <% if @trip.trip_type.present? %>
+        <div class="join-trip__tags">
+          <span class="join-trip__tag"><%= @trip.trip_type %></span>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="join-trip__image">
+      <img src="http://localhost:3845/assets/24106a4300e63fd055a65c3df61adc6a494b7570.png" alt="<%= @trip.destination %>" class="join-trip__image-img">
+    </div>
+
+    <div class="join-trip__message">
+      <p>You've been invited to join this trip! Review the details, vote on suggestions, and help shape the final itinerary together.</p>
+    </div>
+
+    <div class="join-trip__actions">
+      <%= button_to "Accept invitation", accept_invitation_trip_path(@trip), method: :post, class: "join-trip__button join-trip__button--primary" %>
+      <%= link_to "Decline", root_path, class: "join-trip__button join-trip__button--secondary" %>
+    </div>
+  </div>
+</div>

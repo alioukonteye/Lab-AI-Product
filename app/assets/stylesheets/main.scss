@@ -1,0 +1,17 @@
+// Config - Variables du design system Figma
+@import "config/variables";
+
+// Components
+@import "components/navbar";
+
+// Pages
+@import "pages/home";
+@import "pages/auth";
+@import "pages/trips_index";
+@import "pages/trip_dashboard";
+@import "pages/create_trip";
+@import "pages/invitations";
+@import "pages/join_trip";
+@import "pages/preferences";
+@import "pages/recommendations";
+@import "pages/itinerary";

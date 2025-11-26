@@ -21,6 +21,12 @@ class RecommendationsController < ApplicationController
 
     if activities_data.any?
       ActiveRecord::Base.transaction do
+        # If a recommendation already exists (regeneration case), destroy it
+        @trip.recommendation&.destroy
+
+        # Reset review status for all participants
+        @trip.user_trip_statuses.update_all(recommendation_reviewed: false)
+
         @recommendation = Recommendation.create!(trip: @trip)
 
         activities_data.each do |activity_data|

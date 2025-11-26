@@ -1,227 +1,349 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-
-puts "\n\e[34m============================================================\e[0m"
-puts "\e[34m🌱 STARTING DATABASE SEEDING\e[0m"
-puts "\e[34m============================================================\e[0m\n"
-
-puts "\e[33m🗑️  Cleaning database...\e[0m"
-# Clean up in reverse order of dependencies
-Vote.destroy_all
-ItineraryItem.destroy_all
-Itinerary.destroy_all
-RecommendationItem.destroy_all
-Recommendation.destroy_all
-ActivityItem.destroy_all
-PreferencesForm.destroy_all
+# Clear existing data
+puts "Cleaning database..."
 UserTripStatus.destroy_all
+PreferencesForm.destroy_all
 Trip.destroy_all
 User.destroy_all
 
-puts "\e[32m✅ Database cleaned.\e[0m\n"
-
-puts "\e[36m👥 Creating Users...\e[0m"
+puts "Creating users..."
+# Create test users
 alice = User.create!(
-  email: 'alice@example.com',
-  password: 'password',
-  first_name: 'Alice',
-  last_name: 'Wonderland'
+  email: "alice@example.com",
+  password: "password",
+  password_confirmation: "password",
+  first_name: "Alice"
 )
 
 bob = User.create!(
-  email: 'bob@example.com',
-  password: 'password',
-  first_name: 'Bob',
-  last_name: 'Builder'
+  email: "bob@example.com",
+  password: "password",
+  password_confirmation: "password",
+  first_name: "Bob"
 )
 
 charlie = User.create!(
-  email: 'charlie@example.com',
-  password: 'password',
-  first_name: 'Charlie',
-  last_name: 'Chaplin'
-)
-puts "\e[32m✅ Users created: Alice, Bob, Charlie\e[0m\n"
-
-# --- Trip A: Just Created ---
-puts "\e[35m✈️  Creating Trip A (Paris) - Just Created...\e[0m"
-trip_a = Trip.create!(
-  name: 'Paris Getaway',
-  destination: 'Paris, France',
-  start_date: Date.today + 1.month,
-  end_date: Date.today + 1.month + 5.days,
-  trip_type: 'leisure'
+  email: "charlie@example.com",
+  password: "password",
+  password_confirmation: "password",
+  first_name: "Charlie"
 )
 
-UserTripStatus.create!(
-  user: alice,
-  trip: trip_a,
-  role: :creator,
-  trip_status: 'created',
-  is_invited: true,
-  invitation_accepted: true
+diana = User.create!(
+  email: "diana@example.com",
+  password: "password",
+  password_confirmation: "password",
+  first_name: "Diana"
 )
-puts "\e[32m   -> Trip created.\e[0m\n"
 
-# --- Trip B: Recommendations Ready ---
-puts "\e[35m🍣 Creating Trip B (Tokyo) - Recommendations Ready...\e[0m"
-trip_b = Trip.create!(
-  name: 'Tokyo Adventure',
-  destination: 'Tokyo, Japan',
-  start_date: Date.today + 2.months,
-  end_date: Date.today + 2.months + 10.days,
-  trip_type: 'adventure'
+puts "Creating trips in different states..."
+
+# ===== TRIP 1: Waiting for participants to accept =====
+trip1 = Trip.create!(
+  name: "Paris Weekend",
+  destination: "Paris, France",
+  start_date: Date.today + 30.days,
+  end_date: Date.today + 33.days,
+  trip_type: "City break"
 )
 
 UserTripStatus.create!(
   user: alice,
-  trip: trip_b,
+  trip: trip1,
   role: :creator,
   trip_status: 'created',
   is_invited: true,
-  invitation_accepted: true
-)
-
-rec_b = Recommendation.create!(
-  trip: trip_b,
-  system_prompt: "Generated recommendations for Tokyo..."
-)
-
-# Create some activity items
-activity_1 = ActivityItem.create!(
-  name: 'Senso-ji Temple',
-  description: 'Ancient Buddhist temple in Asakusa.',
-  price: 0,
-  activity_type: 'culture'
-)
-activity_2 = ActivityItem.create!(
-  name: 'Tokyo Skytree',
-  description: 'Tallest tower in the world.',
-  price: 3000,
-  activity_type: 'sightseeing'
-)
-
-RecommendationItem.create!(recommendation: rec_b, activity_item: activity_1)
-RecommendationItem.create!(recommendation: rec_b, activity_item: activity_2)
-puts "\e[32m   -> Trip and recommendations created.\e[0m\n"
-
-
-# --- Trip C: Itinerary Ready ---
-puts "\e[35m🗽 Creating Trip C (New York) - Itinerary Ready...\e[0m"
-trip_c = Trip.create!(
-  name: 'NYC Business Trip',
-  destination: 'New York, USA',
-  start_date: Date.today + 3.months,
-  end_date: Date.today + 3.months + 3.days,
-  trip_type: 'business'
-)
-
-UserTripStatus.create!(
-  user: alice,
-  trip: trip_c,
-  role: :creator,
-  trip_status: 'created',
-  is_invited: true,
-  invitation_accepted: true
-)
-
-itinerary_c = Itinerary.create!(
-  trip: trip_c,
-  system_prompt: "Final itinerary for NYC..."
-)
-
-activity_3 = ActivityItem.create!(
-  name: 'Central Park Walk',
-  description: 'Relaxing walk in the park.',
-  price: 0,
-  activity_type: 'leisure'
-)
-
-ItineraryItem.create!(
-  itinerary: itinerary_c,
-  activity_item: activity_3,
-  day: 1,
-  time: '10:00',
-  position: 1
-)
-puts "\e[32m   -> Trip and itinerary created.\e[0m\n"
-
-# --- Trip D: Joined Trip ---
-puts "\e[35m💂 Creating Trip D (London) - Bob Creator, Alice Joined...\e[0m"
-trip_d = Trip.create!(
-  name: 'London Calling',
-  destination: 'London, UK',
-  start_date: Date.today + 4.months,
-  end_date: Date.today + 4.months + 4.days,
-  trip_type: 'culture'
+  invitation_accepted: true,
+  form_filled: true
 )
 
 UserTripStatus.create!(
   user: bob,
-  trip: trip_d,
-  role: :creator,
-  trip_status: 'created',
+  trip: trip1,
+  role: :invitee,
+  trip_status: 'invited',
   is_invited: true,
-  invitation_accepted: true
+  invitation_accepted: false, # NOT ACCEPTED YET
+  form_filled: false
+)
+
+# ===== TRIP 2: Waiting for preferences =====
+trip2 = Trip.create!(
+  name: "Tokyo Adventure",
+  destination: "Tokyo, Japan",
+  start_date: Date.today + 60.days,
+  end_date: Date.today + 67.days,
+  trip_type: "Adventure"
 )
 
 UserTripStatus.create!(
   user: alice,
-  trip: trip_d,
-  role: :invitee,
+  trip: trip2,
+  role: :creator,
   trip_status: 'joined',
   is_invited: true,
-  invitation_accepted: true
-)
-puts "\e[32m   -> Trip created with Alice as joined participant.\e[0m\n"
-
-# --- Trip E: Pending Invitation ---
-puts "\e[35m🍺 Creating Trip E (Berlin) - Charlie Creator, Alice Pending...\e[0m"
-trip_e = Trip.create!(
-  name: 'Berlin Tech Conf',
-  destination: 'Berlin, Germany',
-  start_date: Date.today + 5.months,
-  end_date: Date.today + 5.months + 2.days,
-  trip_type: 'business'
+  invitation_accepted: true,
+  form_filled: true
 )
 
 UserTripStatus.create!(
   user: charlie,
-  trip: trip_e,
-  role: :creator,
-  trip_status: 'created',
-  is_invited: true,
-  invitation_accepted: true
-)
-
-UserTripStatus.create!(
-  user: alice,
-  trip: trip_e,
+  trip: trip2,
   role: :invitee,
-  trip_status: 'invited',
+  trip_status: 'joined',
   is_invited: true,
-  invitation_accepted: false
+  invitation_accepted: true,
+  form_filled: false # PREFERENCES NOT FILLED
 )
-puts "\e[32m   -> Trip created with Alice as pending invitee.\e[0m\n"
 
-puts "\n\e[34m============================================================\e[0m"
-puts "\e[34m🎉 SEEDING COMPLETED SUCCESSFULLY!\e[0m"
-puts "\e[34m============================================================\e[0m\n"
+# ===== TRIP 3: Ready to generate recommendations =====
+trip3 = Trip.create!(
+  name: "Barcelona Beach Trip",
+  destination: "Barcelona, Spain",
+  start_date: Date.today + 45.days,
+  end_date: Date.today + 49.days,
+  trip_type: "Beach"
+)
 
-puts "\n\e[1;33m📋 RECAP & TESTING INSTRUCTIONS\e[0m"
-puts "\e[33m------------------------------------------------------------\e[0m"
+alice_status_3 = UserTripStatus.create!(
+  user: alice,
+  trip: trip3,
+  role: :creator,
+  trip_status: 'joined',
+  is_invited: true,
+  invitation_accepted: true,
+  form_filled: true
+)
 
-puts "\n\e[1;36m🔑 CREDENTIALS\e[0m"
-puts "  • \e[1mAlice\e[0m   | Login: \e[36malice@example.com\e[0m   | Pass: \e[36mpassword\e[0m | -> \e[32mMain Tester\e[0m"
-puts "  • \e[1mBob\e[0m     | Login: \e[36mbob@example.com\e[0m     | Pass: \e[36mpassword\e[0m | -> Collaborator"
-puts "  • \e[1mCharlie\e[0m | Login: \e[36mcharlie@example.com\e[0m | Pass: \e[36mpassword\e[0m | -> Collaborator"
+diana_status_3 = UserTripStatus.create!(
+  user: diana,
+  trip: trip3,
+  role: :invitee,
+  trip_status: 'joined',
+  is_invited: true,
+  invitation_accepted: true,
+  form_filled: true
+)
 
-puts "\n\e[1;35m🧪 TEST SCENARIOS (Log in as Alice)\e[0m"
-puts "  1. \e[1mParis Getaway\e[0m     -> \e[36mJust Created\e[0m. Test generating recommendations."
-puts "  2. \e[1mTokyo Adventure\e[0m   -> \e[36mRecommendations Ready\e[0m. Test voting/selecting."
-puts "  3. \e[1mNYC Business Trip\e[0m -> \e[36mItinerary Ready\e[0m. Test viewing final plan."
-puts "  4. \e[1mLondon Calling\e[0m    -> \e[36mJoined\e[0m. Test participant view."
-puts "  5. \e[1mBerlin Tech Conf\e[0m  -> \e[36mPending Invite\e[0m. Test accepting invitation."
+# Create preferences for both
+PreferencesForm.create!(
+  user_trip_status: alice_status_3,
+  budget: "medium",
+  travel_pace: "moderate",
+  interests: "Museums, food, culture",
+  activity_types: "Walking tours, restaurants"
+)
 
-puts "\n\e[34m============================================================\e[0m\n"
+PreferencesForm.create!(
+  user_trip_status: diana_status_3,
+  budget: "medium",
+  travel_pace: "relaxed",
+  interests: "Beach, nightlife",
+  activity_types: "Beach clubs, bars"
+)
+
+# ===== TRIP 4: Recommendations ready - participants need to vote =====
+trip4 = Trip.create!(
+  name: "Rome Cultural Tour",
+  destination: "Rome, Italy",
+  start_date: Date.today + 50.days,
+  end_date: Date.today + 54.days,
+  trip_type: "Cultural"
+)
+
+alice_status_4 = UserTripStatus.create!(
+  user: alice,
+  trip: trip4,
+  role: :creator,
+  trip_status: 'joined',
+  is_invited: true,
+  invitation_accepted: true,
+  form_filled: true,
+  recommendation_reviewed: false
+)
+
+bob_status_4 = UserTripStatus.create!(
+  user: bob,
+  trip: trip4,
+  role: :invitee,
+  trip_status: 'joined',
+  is_invited: true,
+  invitation_accepted: true,
+  form_filled: true,
+  recommendation_reviewed: false
+)
+
+# Create preferences
+PreferencesForm.create!(
+  user_trip_status: alice_status_4,
+  budget: "high",
+  travel_pace: "moderate",
+  interests: "History, architecture, art",
+  activity_types: "Museums, guided tours"
+)
+
+PreferencesForm.create!(
+  user_trip_status: bob_status_4,
+  budget: "medium",
+  travel_pace: "moderate",
+  interests: "Food, culture",
+  activity_types: "Food tours, restaurants"
+)
+
+# Create recommendation with activities
+recommendation_4 = Recommendation.create!(trip: trip4)
+
+[
+  { name: 'Colosseum Tour', description: 'Explore ancient Roman amphitheater', price: 25, activity_type: 'Historical' },
+  { name: 'Vatican Museums', description: 'Visit Sistine Chapel and art galleries', price: 30, activity_type: 'Cultural' },
+  { name: 'Trastevere Food Tour', description: 'Taste authentic Roman cuisine', price: 75, activity_type: 'Food' },
+  { name: 'Trevi Fountain Evening Walk', description: 'Romantic stroll through historic center', price: 0, activity_type: 'Sightseeing' },
+  { name: 'Roman Forum Exploration', description: 'Walk through ancient Roman marketplace', price: 20, activity_type: 'Historical' }
+].each do |activity_data|
+  activity = ActivityItem.create!(
+    name: activity_data[:name],
+    description: activity_data[:description],
+    price: activity_data[:price],
+    activity_type: activity_data[:activity_type]
+  )
+  RecommendationItem.create!(recommendation: recommendation_4, activity_item: activity)
+end
+
+# ===== TRIP 5: Itinerary complete - ready to view =====
+trip5 = Trip.create!(
+  name: "Amsterdam Discovery",
+  destination: "Amsterdam, Netherlands",
+  start_date: Date.today + 40.days,
+  end_date: Date.today + 43.days,
+  trip_type: "City break"
+)
+
+alice_status_5 = UserTripStatus.create!(
+  user: alice,
+  trip: trip5,
+  role: :creator,
+  trip_status: 'joined',
+  is_invited: true,
+  invitation_accepted: true,
+  form_filled: true,
+  recommendation_reviewed: true
+)
+
+charlie_status_5 = UserTripStatus.create!(
+  user: charlie,
+  trip: trip5,
+  role: :invitee,
+  trip_status: 'joined',
+  is_invited: true,
+  invitation_accepted: true,
+  form_filled: true,
+  recommendation_reviewed: true
+)
+
+# Create preferences
+PreferencesForm.create!(
+  user_trip_status: alice_status_5,
+  budget: "medium",
+  travel_pace: "relaxed",
+  interests: "Art, canals, cycling",
+  activity_types: "Museums, bike tours"
+)
+
+PreferencesForm.create!(
+  user_trip_status: charlie_status_5,
+  budget: "medium",
+  travel_pace: "moderate",
+  interests: "History, coffee shops",
+  activity_types: "Walking tours, cafes"
+)
+
+# Create recommendation
+recommendation_5 = Recommendation.create!(trip: trip5)
+
+activities_5 = [
+  { name: 'Van Gogh Museum', description: 'Admire masterpieces of Dutch art', price: 22, activity_type: 'Cultural' },
+  { name: 'Canal Cruise', description: 'Explore Amsterdam from the water', price: 18, activity_type: 'Sightseeing' },
+  { name: 'Anne Frank House', description: 'Moving historical museum', price: 14, activity_type: 'Historical' },
+  { name: 'Bike Tour', description: 'Cycle through the city like a local', price: 35, activity_type: 'Activity' },
+  { name: 'Jordaan District Walk', description: 'Explore charming neighborhood', price: 0, activity_type: 'Sightseeing' }
+].map do |activity_data|
+  activity = ActivityItem.create!(
+    name: activity_data[:name],
+    description: activity_data[:description],
+    price: activity_data[:price],
+    activity_type: activity_data[:activity_type]
+  )
+  RecommendationItem.create!(recommendation: recommendation_5, activity_item: activity)
+  activity
+end
+
+# Create votes (all liked for consensus)
+recommendation_5.recommendation_items.each do |item|
+  [alice, charlie].each do |user|
+    Vote.create!(recommendation_item: item, user: user, liked: true)
+  end
+end
+
+# Create itinerary
+itinerary_5 = Itinerary.create!(trip: trip5)
+
+# Day 1
+[
+  { time: '10:00', activity: activities_5[0], position: 1, day: 1 }, # Van Gogh Museum
+  { time: '14:00', activity: activities_5[4], position: 2, day: 1 }, # Jordaan Walk
+  { time: '17:00', activity: activities_5[1], position: 3, day: 1 }  # Canal Cruise
+].each do |item_data|
+  ItineraryItem.create!(
+    itinerary: itinerary_5,
+    activity_item: item_data[:activity],
+    day: item_data[:day],
+    time: item_data[:time],
+    position: item_data[:position]
+  )
+end
+
+# Day 2
+[
+  { time: '09:30', activity: activities_5[3], position: 1, day: 2 }, # Bike Tour
+  { time: '13:00', activity: activities_5[2], position: 2, day: 2 }  # Anne Frank House
+].each do |item_data|
+  ItineraryItem.create!(
+    itinerary: itinerary_5,
+    activity_item: item_data[:activity],
+    day: item_data[:day],
+    time: item_data[:time],
+    position: item_data[:position]
+  )
+end
+
+puts "✅ Seed completed!"
+puts ""
+puts "=" * 60
+puts "TEST USER LOGIN"
+puts "=" * 60
+puts "Email: alice@example.com"
+puts "Password: password"
+puts ""
+puts "=" * 60
+puts "TRIPS CREATED (as Alice)"
+puts "=" * 60
+puts "1. #{trip1.name} - État: Waiting for participants to accept"
+puts "   → Bob hasn't accepted yet"
+puts ""
+puts "2. #{trip2.name} - État: Waiting for preferences"
+puts "   → Charlie needs to fill preferences"
+puts ""
+puts "3. #{trip3.name} - État: Ready to generate recommendations"
+puts "   → All preferences filled, ready to generate!"
+puts ""
+puts "4. #{trip4.name} - État: Recommendations ready - vote now!"
+puts "   → Alice and Bob need to review and vote on activities"
+puts ""
+puts "5. #{trip5.name} - État: Itinerary complete!"
+puts "   → View your personalized itinerary"
+puts ""
+puts "=" * 60
+puts "Autres users disponibles:"
+puts "- bob@example.com (password: password)"
+puts "- charlie@example.com (password: password)"
+puts "- diana@example.com (password: password)"
+puts "=" * 60

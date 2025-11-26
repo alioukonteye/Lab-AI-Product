@@ -8,15 +8,43 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+    <%= stylesheet_link_tag "main", "data-turbo-track": "reload" %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body style="background-color: var(--color-bg-main); font-family: var(--font-body); color: var(--color-text-main);">
+    <nav class="navbar">
+      <div class="navbar__container">
+        <div class="navbar__brand">
+          <%= link_to root_path, class: "navbar__logo-link" do %>
+            <div class="navbar__logo">
+              <span class="navbar__logo-text" style="font-weight: 900; font-size: 36px;">YUGO</span>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="navbar__links">
+          <%= link_to "My trips", trips_path, class: "navbar__link" %>
+          <%= link_to "Get inspired", "#", class: "navbar__link" %>
+
+          <% if user_signed_in? %>
+            <div class="navbar__user">
+              <div class="navbar__avatar">
+                <img src="http://localhost:3845/assets/c16f6fd83a75eedb4be9dcfb3542d1b6da4741bd.png" alt="<%= current_user.first_name || current_user.email %>" class="navbar__avatar-img">
+              </div>
+              <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "navbar__sign-out" %>
+            </div>
+          <% else %>
+            <%= link_to "Sign in", new_user_session_path, class: "navbar__link" %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+
+    <main>
       <%= yield %>
     </main>
   </body>

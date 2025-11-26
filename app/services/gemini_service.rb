@@ -5,11 +5,13 @@ class GeminiService
   # Définition des schémas pour la sortie structurée
   class ActivitiesSchema < RubyLLM::Schema
     array :activities do
-      string :name
-      string :description
-      number :price
-      string :category
-      string :activity_type
+      object do
+        string :name
+        string :description
+        number :price
+        string :category
+        string :activity_type
+      end
     end
   end
 
@@ -35,18 +37,22 @@ class GeminiService
       - Activity Types: #{preferences.activity_types}
     PROMPT
 
-    response = RubyLLM.chat(model: 'gemini-2.0-flash')
+    response = RubyLLM.chat(model: 'gpt-4o-mini')
                       .with_schema(ActivitiesSchema)
                       .ask(prompt)
 
-    # La réponse est déjà parsée grâce au schéma
-    # Cependant, RubyLLM retourne un hash avec les clés définies dans le schéma
-    # ActivitiesSchema définit un tableau :activities
+    # with_schema returns a RubyLLM::Message object with structured content
+    content = response.respond_to?(:content) ? response.content : response
 
-    return [] unless response && response['activities']
-    response['activities']
+    puts "DEBUG: Raw AI Response: #{response.inspect}"
+    puts "DEBUG: Parsed Content: #{content.inspect}"
+    Rails.logger.info "DEBUG: Raw AI Response: #{response.inspect}"
+    Rails.logger.info "DEBUG: Parsed Content: #{content.inspect}"
+
+    return [] unless content && content['activities']
+    content['activities']
   rescue StandardError => e
-    Rails.logger.error "Gemini Error: #{e.message}"
+    Rails.logger.error "AI API Error: #{e.message}"
     []
   end
 
@@ -59,21 +65,49 @@ class GeminiService
       #{activities}
     PROMPT
 
-    response = RubyLLM.chat(model: 'gemini-2.0-flash')
+    Rails.logger.info "Generating itinerary for trip #{trip.id} with activities: #{selected_activity_ids}"
+
+    response = RubyLLM.chat(model: 'gpt-4o-mini')
                       .with_schema(ItinerarySchema)
                       .ask(prompt)
 
-    return {} unless response && response['days']
+    Rails.logger.info "AI API response: #{response.inspect}"
 
-    # Transformer la réponse structurée au format attendu par le contrôleur
-    # Le contrôleur attend un hash { "day_1" => [...], "day_2" => [...] }
+    # with_schema returns a RubyLLM::Message object with structured content
+    content = response.respond_to?(:content) ? response.content : response
+
+    return {} unless content && content['days']
+
+    # Transform the structured response to the format expected by the controller
+    # Controller expects a hash { "day_1" => [...], "day_2" => [...] }
     formatted_response = {}
-    response['days'].each do |day|
+    content['days'].each do |day|
       formatted_response["day_#{day['day_number']}"] = day['activities']
     end
-    formatted_response
+    return formatted_response if formatted_response.any?
+
+    # Fallback if API fails or returns empty
+    Rails.logger.warn "AI API returned empty response, using fallback data"
+    fallback_itinerary(trip)
   rescue StandardError => e
-    Rails.logger.error "Gemini Error: #{e.message}"
-    {}
+    Rails.logger.error "AI API Error: #{e.message}"
+    Rails.logger.error e.backtrace.join("\n")
+    fallback_itinerary(trip)
+  end
+
+  private
+
+  def fallback_itinerary(trip)
+    {
+      "day_1" => [
+        { "time" => "09:00", "activity_name" => "Morning Exploration", "description" => "Start your day exploring the city center." },
+        { "time" => "13:00", "activity_name" => "Local Lunch", "description" => "Enjoy delicious local cuisine." },
+        { "time" => "15:00", "activity_name" => "Afternoon Sightseeing", "description" => "Visit famous landmarks." }
+      ],
+      "day_2" => [
+        { "time" => "10:00", "activity_name" => "Cultural Tour", "description" => "Visit museums and art galleries." },
+        { "time" => "14:00", "activity_name" => "Relaxation", "description" => "Spend time at a park or beach." }
+      ]
+    }
   end
 end
