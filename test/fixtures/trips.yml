@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  destination: MyString
+  start_date: 2025-11-25
+  end_date: 2025-11-25
+  trip_type: MyString
+
+two:
+  name: MyString
+  destination: MyString
+  start_date: 2025-11-25
+  end_date: 2025-11-25
+  trip_type: MyString

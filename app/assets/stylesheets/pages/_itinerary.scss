@@ -1,0 +1,236 @@
+.itinerary-page {
+  background-color: #f9fafb;
+  min-height: calc(100vh - 80px);
+  padding: 60px 20px;
+}
+
+.itinerary-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Header */
+.itinerary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 60px;
+}
+
+.itinerary-title {
+  font-family: 'Crimson Pro', serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.1;
+  margin: 0 0 16px 0;
+}
+
+.text-highlight {
+  color: #d97706;
+}
+
+.itinerary-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.btn-back {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  color: #6b7280;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.btn-back:hover {
+  color: #111827;
+}
+
+/* Timeline */
+.timeline {
+  position: relative;
+}
+
+.timeline-day {
+  position: relative;
+  padding-bottom: 60px;
+}
+
+.day-marker {
+  position: sticky;
+  top: 20px;
+  z-index: 10;
+  margin-bottom: 24px;
+}
+
+.day-badge {
+  background-color: #d97706;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 8px 20px;
+  border-radius: 100px;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+}
+
+.day-content {
+  margin-left: 20px;
+  padding-left: 40px;
+  border-left: 2px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Activity Card */
+.activity-card {
+  background-color: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  display: flex;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.activity-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.activity-card__image-wrapper {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.activity-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.activity-card__content {
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.activity-card__title {
+  font-family: 'Crimson Pro', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.activity-card__price {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  color: #111827;
+}
+
+.activity-card__description {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.5;
+  margin: 0 0 20px 0;
+  flex: 1;
+}
+
+.activity-card__footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.activity-card__time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+}
+
+.activity-card__type {
+  background-color: #f3f4f6;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* Actions */
+.itinerary-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 60px;
+}
+
+.btn-primary {
+  background-color: #111827;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  padding: 16px 32px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #000000;
+}
+
+.btn-secondary {
+  background-color: #ffffff;
+  color: #111827;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  padding: 16px 32px;
+  border-radius: 100px;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #f9fafb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .activity-card {
+    flex-direction: column;
+  }
+
+  .activity-card__image-wrapper {
+    width: 100%;
+    height: 200px;
+  }
+
+  .day-content {
+    margin-left: 0;
+    padding-left: 20px;
+  }
+}

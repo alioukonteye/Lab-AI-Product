@@ -1,0 +1,100 @@
+<div class="create-trip-page">
+  <div class="create-trip-page__container">
+    <!-- Progress Sidebar -->
+    <div class="create-trip-page__progress">
+      <div class="progress-widget">
+        <div class="progress-widget__step progress-widget__step--active">
+          <div class="progress-widget__dot"></div>
+          <span class="progress-widget__label">Trip details</span>
+        </div>
+        <div class="progress-widget__step">
+          <div class="progress-widget__dot"></div>
+          <span class="progress-widget__label">Invite friends</span>
+        </div>
+        <div class="progress-widget__step">
+          <div class="progress-widget__dot"></div>
+          <span class="progress-widget__label">Preferences</span>
+        </div>
+        <div class="progress-widget__step">
+          <div class="progress-widget__dot"></div>
+          <span class="progress-widget__label">Suggestions</span>
+        </div>
+        <div class="progress-widget__step">
+          <div class="progress-widget__dot"></div>
+          <span class="progress-widget__label">Itinerary</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Form -->
+    <div class="create-trip-page__main">
+      <h1 class="create-trip-page__title">Create a trip</h1>
+
+      <%= form_with(model: @trip, class: "create-trip-form") do |form| %>
+        <% if @trip.errors.any? %>
+          <div class="create-trip-form__errors">
+            <p class="create-trip-form__errors-title"><%= pluralize(@trip.errors.count, "error") %> prohibited this trip from being saved:</p>
+            <ul class="create-trip-form__errors-list">
+              <% @trip.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="create-trip-form__field">
+          <%= form.label :name, "Trip name", class: "create-trip-form__label" %>
+          <%= form.text_field :name, class: "create-trip-form__input", placeholder: "e.g. Summer in Paris" %>
+        </div>
+
+        <div class="create-trip-form__field">
+          <%= form.label :destination, class: "create-trip-form__label" %>
+          <%= form.text_field :destination, class: "create-trip-form__input", placeholder: "Paris" %>
+        </div>
+
+        <div class="create-trip-form__row">
+          <div class="create-trip-form__field">
+            <%= form.label :start_date, "Start date", class: "create-trip-form__label" %>
+            <%= form.date_field :start_date, class: "create-trip-form__input" %>
+          </div>
+
+          <div class="create-trip-form__field">
+            <%= form.label :end_date, "End date", class: "create-trip-form__label" %>
+            <%= form.date_field :end_date, class: "create-trip-form__input" %>
+          </div>
+        </div>
+
+        <div class="create-trip-form__field">
+          <%= form.label :trip_type, "Type of trip", class: "create-trip-form__label" %>
+          <%= form.select :trip_type,
+              [["Leisure", "Leisure"], ["Adventure", "Adventure"], ["Business", "Business"], ["Family", "Family"], ["Romantic", "Romantic"]],
+              { prompt: "Select a type" },
+              class: "create-trip-form__select" %>
+        </div>
+
+        <div class="create-trip-form__alone-section">
+          <span class="create-trip-form__alone-text">or</span>
+          <button type="button" class="create-trip-form__alone-button">I'm travelling alone</button>
+        </div>
+
+        <%= form.submit "Create trip", class: "create-trip-form__submit" %>
+      <% end %>
+    </div>
+
+    <!-- Tips Sidebar -->
+    <div class="create-trip-page__tips">
+      <div class="tip-card">
+        <h3 class="tip-card__title">Tip #1</h3>
+        <p class="tip-card__text">Choose the right place and time — it can make or break your trip.</p>
+      </div>
+      <div class="tip-card">
+        <h3 class="tip-card__title">Tip #2</h3>
+        <p class="tip-card__text">Invite your friends early to gather everyone's preferences.</p>
+      </div>
+      <div class="tip-card">
+        <h3 class="tip-card__title">Tip #3</h3>
+        <p class="tip-card__text">Be flexible with your dates to get the best experience and prices.</p>
+      </div>
+    </div>
+  </div>
+</div>

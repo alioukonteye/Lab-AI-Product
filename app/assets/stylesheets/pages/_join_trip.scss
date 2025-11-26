@@ -1,0 +1,143 @@
+.join-trip-page {
+  background-color: #FFFFFF;
+  min-height: calc(100vh - 130px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.join-trip-container {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+.join-trip__title {
+  font-family: 'Crimson Pro', serif;
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1;
+  color: #374151;
+  margin: 0 0 40px 0;
+}
+
+.join-trip__details {
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.join-trip__info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.join-trip__info-row:last-of-type {
+  border-bottom: none;
+}
+
+.join-trip__label {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.join-trip__value {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #374151;
+}
+
+.join-trip__tags {
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.join-trip__tag {
+  display: inline-block;
+  padding: 6px 16px;
+  background-color: #fef3c7;
+  color: #92400e;
+  border-radius: 100px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.join-trip__image {
+  width: 100%;
+  height: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+
+.join-trip__image-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.join-trip__message {
+  margin-bottom: 32px;
+}
+
+.join-trip__message p {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #6b7280;
+  margin: 0;
+}
+
+.join-trip__actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.join-trip__button {
+  padding: 14px 32px;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: inline-block;
+}
+
+.join-trip__button--primary {
+  background-color: #d97706;
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+}
+
+.join-trip__button--primary:hover {
+  background-color: #b45309;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(217, 119, 6, 0.4);
+}
+
+.join-trip__button--secondary {
+  background-color: transparent;
+  color: #d97706;
+}
+
+.join-trip__button--secondary:hover {
+  opacity: 0.8;
+}

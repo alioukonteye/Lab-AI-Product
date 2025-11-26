@@ -1,0 +1,294 @@
+.trip-dashboard {
+  background-color: #FFFFFF;
+  min-height: calc(100vh - 130px);
+  padding: 60px 48px;
+}
+
+.trip-dashboard__container {
+  max-width: 1512px;
+  margin: 0 auto;
+}
+
+/* Header */
+.trip-dashboard__header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.trip-dashboard__title {
+  font-family: 'Crimson Pro', serif;
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1;
+  color: #374151;
+  margin: 0 0 16px 0;
+}
+
+.trip-dashboard__meta {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.trip-dashboard__meta-item {
+  display: inline-block;
+}
+
+.trip-dashboard__meta-divider {
+  color: #d1d5db;
+}
+
+/* Content Layout */
+.trip-dashboard__content {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+/* Participants Card */
+.participants-card {
+  background-color: #f9fafb;
+  border-radius: 20px;
+  padding: 32px;
+}
+
+.participants-card__title {
+  font-family: 'Crimson Pro', serif;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1;
+  color: #374151;
+  margin: 0 0 24px 0;
+}
+
+.participants-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.participant-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+}
+
+.participant-item__avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.participant-item__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.participant-item__info {
+  flex: 1;
+}
+
+.participant-item__name {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.participant-item__role {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+}
+
+.participant-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.participant-badge--creator {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.participant-badge--accepted {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.participant-badge--pending {
+  background-color: #e5e7eb;
+  color: #6b7280;
+}
+
+.participants-card__action {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 24px;
+}
+
+.participants-card__invite-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 24px;
+  background-color: transparent;
+  border: 2px solid #d97706;
+  color: #d97706;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.participants-card__invite-btn:hover {
+  background-color: rgba(217, 119, 6, 0.05);
+}
+
+.participants-card__invite-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Status Card */
+.status-card {
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  padding: 48px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.status-card__icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 24px;
+  padding: 16px;
+  background-color: #fef3c7;
+  border-radius: 50%;
+  color: #d97706;
+}
+
+.status-card__icon--success {
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+.status-card__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.status-card__title {
+  font-family: 'Crimson Pro', serif;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #374151;
+  margin: 0 0 16px 0;
+}
+
+.status-card__message {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: #6b7280;
+  margin: 0 0 32px 0;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.status-card__button {
+  display: inline-block;
+  padding: 14px 32px;
+  background-color: #d97706;
+  color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+  transition: all 0.2s ease;
+}
+
+.status-card__button:hover {
+  background-color: #b45309;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(217, 119, 6, 0.4);
+}
+
+/* Activity Grid (for itinerary ready state) */
+.activity-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 32px 0;
+}
+
+.activity-grid__item {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.activity-grid__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .trip-dashboard__content {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .trip-dashboard {
+    padding: 32px 16px;
+  }
+
+  .trip-dashboard__title {
+    font-size: 32px;
+  }
+
+  .participants-card,
+  .status-card {
+    padding: 24px;
+  }
+
+  .activity-grid {
+    grid-template-columns: 1fr;
+  }
+}

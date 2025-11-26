@@ -1,0 +1,187 @@
+/* Réutilisation des styles de create_trip pour cohérence */
+.invitations-page {
+  background-color: #FFFFFF;
+  min-height: calc(100vh - 130px);
+  padding: 60px 48px;
+}
+
+.invitations-page__container {
+  max-width: 1512px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 200px 1fr 320px;
+  gap: 80px;
+  align-items: start;
+}
+
+/* Progress Widget - shared with create_trip */
+.invitations-page__progress {
+  padding-top: 100px;
+}
+
+/* Main Form Section */
+.invitations-page__main {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.invitations-page__title {
+  font-family: 'Crimson Pro', serif;
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1;
+  color: #374151;
+  margin: 0 0 40px 0;
+  text-align: center;
+}
+
+/* Form */
+.invitations-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  text-align: left;
+}
+
+.invitations-form__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.invitations-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.invitations-form__label {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
+  color: #374151;
+}
+
+.invitations-form__input {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 14px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  color: #374151;
+  transition: all 0.2s ease;
+}
+
+.invitations-form__input:focus {
+  outline: none;
+  border-color: #d97706;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+}
+
+.invitations-form__input::placeholder {
+  color: #9ca3af;
+  font-weight: 300;
+}
+
+/* Section "I'm travelling alone" */
+.invitations-form__alone-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+  justify-content: center;
+}
+
+.invitations-form__alone-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.invitations-form__alone-link {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #d97706;
+  text-decoration: underline;
+  transition: opacity 0.2s ease;
+}
+
+.invitations-form__alone-link:hover {
+  opacity: 0.8;
+}
+
+/* Submit Button */
+.invitations-form__submit {
+  margin-top: 24px;
+  padding: 14px 32px;
+  background-color: #d97706;
+  color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+  transition: all 0.2s ease;
+}
+
+.invitations-form__submit:hover {
+  background-color: #b45309;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(217, 119, 6, 0.4);
+}
+
+/* Tips Sidebar - shared */
+.invitations-page__tips {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .invitations-page__container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .invitations-page__progress {
+    position: static;
+  }
+
+  .progress-widget {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .invitations-page__main {
+    max-width: 100%;
+  }
+
+  .invitations-page__tips {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .tip-card {
+    min-width: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .invitations-page {
+    padding: 32px 16px;
+  }
+
+  .invitations-page__title {
+    font-size: 32px;
+  }
+}

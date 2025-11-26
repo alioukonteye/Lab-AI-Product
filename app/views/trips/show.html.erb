@@ -1,0 +1,61 @@
+<div class="trip-dashboard">
+  <div class="trip-dashboard__container">
+    <!-- Header -->
+    <div class="trip-dashboard__header">
+      <h1 class="trip-dashboard__title"><%= @trip.name %></h1>
+      <div class="trip-dashboard__meta">
+        <span class="trip-dashboard__meta-item"><%= @trip.destination %></span>
+        <span class="trip-dashboard__meta-divider">•</span>
+        <span class="trip-dashboard__meta-item"><%= @trip.start_date.strftime("%b %d") %> - <%= @trip.end_date.strftime("%b %d, %Y") %></span>
+        <span class="trip-dashboard__meta-divider">•</span>
+        <span class="trip-dashboard__meta-item"><%= @trip.trip_type %></span>
+      </div>
+    </div>
+
+    <div class="trip-dashboard__content">
+      <!-- Left: Participants -->
+      <div class="trip-dashboard__participants">
+        <div class="participants-card">
+          <h2 class="participants-card__title">Participants</h2>
+
+          <div class="participants-list">
+            <% @trip.user_trip_statuses.each do |status| %>
+              <div class="participant-item">
+                <div class="participant-item__avatar">
+                  <img src="http://localhost:3845/assets/c16f6fd83a75eedb4be9dcfb3542d1b6da4741bd.png" alt="<%= status.user.first_name || status.user.email %>" class="participant-item__avatar-img">
+                </div>
+                <div class="participant-item__info">
+                  <div class="participant-item__name"><%= status.user.first_name || status.user.email.split('@').first %></div>
+                  <div class="participant-item__role">
+                    <% if status.creator? %>
+                      <span class="participant-badge participant-badge--creator">Organizer</span>
+                    <% elsif status.invitation_accepted? %>
+                      <span class="participant-badge participant-badge--accepted">Joined</span>
+                    <% else %>
+                      <span class="participant-badge participant-badge--pending">Invited</span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+          <% if @user_trip_status.creator? %>
+            <div class="participants-card__action">
+              <%= link_to new_trip_trip_invitations_path(@trip), class: "participants-card__invite-btn" do %>
+                <svg class="participants-card__invite-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                </svg>
+                Invite more participants
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Right: Status Card -->
+      <%= render "trip_status", trip: @trip, current_user: current_user %>
+    </div>
+  </div>
+  <%= turbo_stream_from current_user %>
+</div>

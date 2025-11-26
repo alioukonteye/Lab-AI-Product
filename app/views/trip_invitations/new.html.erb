@@ -1,0 +1,72 @@
+<div class="invitations-page">
+  <div class="invitations-page__container">
+    <!-- Progress Sidebar -->
+    <div class="invitations-page__progress">
+      <div class="progress-widget">
+        <div class="progress-widget__step">
+          <div class="progress-widget__dot"></div>
+          <span class="progress-widget__label">Trip details</span>
+        </div>
+        <div class="progress-widget__step progress-widget__step--active">
+          <div class="progress-widget__dot"></div>
+          <span class="progress-widget__label">Invite friends</span>
+        </div>
+        <div class="progress-widget__step">
+          <div class="progress-widget__dot"></div>
+          <span class="progress-widget__label">Preferences</span>
+        </div>
+        <div class="progress-widget__step">
+          <div class="progress-widget__dot"></div>
+          <span class="progress-widget__label">Suggestions</span>
+        </div>
+        <div class="progress-widget__step">
+          <div class="progress-widget__dot"></div>
+          <span class="progress-widget__label">Itinerary</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Form -->
+    <div class="invitations-page__main">
+      <h1 class="invitations-page__title">Invite your friends</h1>
+
+      <%= form_with url: trip_trip_invitations_path(@trip), method: :post, class: "invitations-form" do |form| %>
+        <div class="invitations-form__fields" data-controller="email-fields">
+          <div class="invitations-form__field">
+            <%= label_tag "emails[]", "Email address", class: "invitations-form__label" %>
+            <%= email_field_tag "emails[]", "", class: "invitations-form__input", placeholder: "friend@example.com" %>
+          </div>
+
+          <div class="invitations-form__field">
+            <%= label_tag "emails[]", "Email address", class: "invitations-form__label" %>
+            <%= email_field_tag "emails[]", "", class: "invitations-form__input", placeholder: "friend@example.com" %>
+          </div>
+
+          <div class="invitations-form__field">
+            <%= label_tag "emails[]", "Email address", class: "invitations-form__label" %>
+            <%= email_field_tag "emails[]", "", class: "invitations-form__input", placeholder: "friend@example.com" %>
+          </div>
+        </div>
+
+        <div class="invitations-form__alone-section">
+          <span class="invitations-form__alone-text">or</span>
+          <%= link_to "I'm travelling alone", new_trip_preferences_form_path(@trip), class: "invitations-form__alone-link" %>
+        </div>
+
+        <%= form.submit "Send invitations", class: "invitations-form__submit" %>
+      <% end %>
+    </div>
+
+    <!-- Tips Sidebar -->
+    <div class="invitations-page__tips">
+      <div class="tip-card">
+        <h3 class="tip-card__title">Tip #1</h3>
+        <p class="tip-card__text">Invite people early to get everyone's preferences and build the perfect itinerary.</p>
+      </div>
+      <div class="tip-card">
+        <h3 class="tip-card__title">Tip #2</h3>
+        <p class="tip-card__text">The secret to a great trip is the people you travel with.</p>
+      </div>
+    </div>
+  </div>
+</div>
